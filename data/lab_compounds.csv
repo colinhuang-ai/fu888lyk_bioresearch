@@ -1,0 +1,6 @@
+compound_id,compound_name,source_strain,cancer_cell_line,ic50_uM,assay_method,selectivity_index,apoptosis_status
+CPD-01,Streptoketide A,Streptomyces sp. VN-08,MCF-7,3.45,MTT (48h),14.2,Annexin V+ / Caspase-3 Cleaved
+CPD-01,Streptoketide A,Streptomyces sp. VN-08,HeLa,4.12,MTT (48h),11.8,MMP Loss (JC-1)
+CPD-02,Bacillopeptin B,Bacillus velezensis BV-12,A549,6.80,CCK-8 (48h),8.5,G2/M Arrest
+CPD-03,Marinomycin D,Actinomadura sp. M-04,HepG2,1.25,MTT (72h),22.0,Caspase-3/9 Activation / PARP Cleavage
+CPD-Ref,Doxorubicin,Positive Control,MCF-7,0.85,MTT (48h),5.1,DNA Intercalation / Apoptosis
