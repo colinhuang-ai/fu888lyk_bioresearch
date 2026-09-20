@@ -13,13 +13,13 @@ if sys.stdout.encoding != "utf-8":
     except Exception:
         pass
 
-# Đảm bảo import được src từ thư mục gốc
+# Đảm bảo import được app từ thư mục gốc
 ROOT_DIR = Path(__file__).resolve().parent.parent
 if str(ROOT_DIR) not in sys.path:
     sys.path.append(str(ROOT_DIR))
 
-from src.agent.assistant import ScientificResearchAssistant
-from src.writer.paper_generator import PaperMetadata
+from app.agent.assistant import ScientificResearchAssistant
+from app.tools.writer.paper_generator import PaperMetadata
 
 def main():
     print("=== DEMO KHAI THÁC DỮ LIỆU & RAG TRONG BOOKS ===")

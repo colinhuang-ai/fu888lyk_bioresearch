@@ -35,7 +35,7 @@ anti-cancer-research/
 │   ├── raw_papers/            # Chứa các file PDF bài báo khoa học
 │   ├── vector_db/             # ChromaDB persistent vector storage
 │   └── lab_compounds.csv      # Bảng dữ liệu hoạt tính sinh học phòng lab
-├── src/
+├── app/
 │   ├── fetchers/              # Module thu thập dữ liệu (PubMed & Europe PMC)
 │   ├── ingestion/             # Module đọc PDF (pypdfium2) & chia đoạn ngữ nghĩa
 │   ├── chemistry/             # Module hóa dược (PubChem & Lipinski Rule of 5)

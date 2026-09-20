@@ -18,7 +18,7 @@ if str(ROOT_DIR) not in sys.path:
     sys.path.append(str(ROOT_DIR))
 
 # 1. Trợ lý AI toàn diện
-from src.agent.assistant import ScientificResearchAssistant
+from app.agent.assistant import ScientificResearchAssistant
 
 assistant = ScientificResearchAssistant()
 
@@ -38,7 +38,7 @@ for r in results:
     print(r["rank"], r["rrf_score"], r["content"][:100])
 
 # 5. Soạn thảo bài báo và xuất Word (.docx)
-from src.writer.paper_generator import PaperMetadata
+from app.writer.paper_generator import PaperMetadata
 
 meta = PaperMetadata(
     title="",

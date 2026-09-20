@@ -101,7 +101,7 @@ scientific_rag_agent/
 │   ├── vector_db/                # Dữ liệu vector nhúng lưu trữ cục bộ
 │   └── lab_compounds.csv         # Dữ liệu hoạt tính phân đoạn/hợp chất phòng lab
 │
-├── src/
+├── app/
 │   ├── __init__.py
 │   ├── config.py                 # Thiết lập API keys, models, đường dẫn
 │   │
@@ -152,10 +152,10 @@ rank_bm25>=0.2.2
 
 ### 3. Cài đặt Chi tiết Mã nguồn
 
-#### A. Tools Nghiên cứu Khoa học (`src/tools/scientific_tools.py`)
+#### A. Tools Nghiên cứu Khoa học (`app/tools/scientific_tools.py`)
 
 ```python
-"""src/tools/scientific_tools.py: Bộ công cụ chuyên dụng cho AI Nghiên cứu."""
+"""app/tools/scientific_tools.py: Bộ công cụ chuyên dụng cho AI Nghiên cứu."""
 
 import json
 import requests
@@ -271,10 +271,10 @@ def calculate_druglikeness(smiles: str) -> str:
 
 ---
 
-#### B. Trình Lập chỉ mục & Hybrid RAG (`src/rag/engine.py`)
+#### B. Trình Lập chỉ mục & Hybrid RAG (`app/rag/engine.py`)
 
 ```python
-"""src/rag/engine.py: Động cơ RAG kết nối ChromaDB."""
+"""app/rag/engine.py: Động cơ RAG kết nối ChromaDB."""
 
 from typing import List, Dict, Any
 import chromadb
@@ -325,10 +325,10 @@ class ScientificRAGEngine:
 
 ---
 
-#### C. Định nghĩa Schema Công cụ cho AI Agent (`src/agent/tool_definitions.py`)
+#### C. Định nghĩa Schema Công cụ cho AI Agent (`app/agent/tool_definitions.py`)
 
 ```python
-"""src/agent/tool_definitions.py: Tool Schemas cho Function Calling."""
+"""app/agent/tool_definitions.py: Tool Schemas cho Function Calling."""
 
 TOOLS_DEFINITION = [
     {
@@ -401,8 +401,8 @@ TOOLS_DEFINITION = [
 ```python
 """main.py: Điểm khởi chạy của Hệ thống AI Nghiên cứu."""
 
-from src.tools.scientific_tools import query_pubmed, query_pubchem, calculate_druglikeness
-from src.rag.engine import ScientificRAGEngine
+from app.tools.scientific_tools import query_pubmed, query_pubchem, calculate_druglikeness
+from app.rag.engine import ScientificRAGEngine
 
 TOOL_REGISTRY = {
     "query_pubmed": query_pubmed,

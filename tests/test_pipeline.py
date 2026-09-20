@@ -7,15 +7,16 @@ from pathlib import Path
 import os
 import shutil
 
-from src.fetchers.pubmed_fetcher import PubMedFetcher, AcademicArticle
-from src.chemistry.pubchem_client import PubChemClient, CompoundData
-from src.chemistry.druglikeness import evaluate_druglikeness
-from src.rag.vector_store import VectorStore
-from src.rag.bm25_index import BM25Index
-from src.rag.hybrid_retriever import HybridRetriever
-from src.ingestion.text_splitter import ScientificTextSplitter, DocumentChunk
-from src.writer.paper_generator import ScientificPaperGenerator, PaperMetadata
-from src.config import BASE_DIR
+from app.tools.fetchers.pubmed_fetcher import PubMedFetcher
+from app.tools.fetchers.model.article import AcademicArticle
+from app.tools.chemistry.pubchem_client import PubChemClient, CompoundData
+from app.tools.chemistry.druglikeness import evaluate_druglikeness
+from app.tools.rag.vector_store import VectorStore
+from app.tools.rag.bm25_index import BM25Index
+from app.tools.rag.hybrid_retriever import HybridRetriever
+from app.tools.ingestion.text_splitter import ScientificTextSplitter, DocumentChunk
+from app.tools.writer.paper_generator import ScientificPaperGenerator, PaperMetadata
+from app.config import BASE_DIR
 
 
 class TestScientificPipeline(unittest.TestCase):

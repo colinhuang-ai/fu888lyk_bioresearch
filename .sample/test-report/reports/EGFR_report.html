@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Báo Cáo Nghiên Cứu Protein - EGFR</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #0f172a; color: #e2e8f0; margin: 0; padding: 24px; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .header { background: #1e293b; padding: 24px; border-radius: 12px; border: 1px solid #334155; margin-bottom: 24px; }
+        h1 { color: #38bdf8; margin-top: 0; }
+        h2 { color: #818cf8; border-bottom: 2px solid #334155; padding-bottom: 8px; margin-top: 32px; }
+        .badge { background: #0284c7; color: white; padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card { background: #1e293b; padding: 20px; border-radius: 12px; border: 1px solid #334155; }
+        .evidence-card { background: #0b132b; border-left: 4px solid #38bdf8; padding: 12px 16px; margin-bottom: 12px; border-radius: 0 8px 8px 0; font-size: 14px; }
+        img { max-width: 100%; border-radius: 8px; }
+        a { color: #38bdf8; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+    <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔬 Báo Cáo Nghiên Cứu Protein: Epidermal growth factor receptor (EGFR)</h1>
+            <p><span class="badge">UniProt: P00533</span> <span class="badge">PDB: 8A27</span> <span class="badge">Sinh vật: Homo sapiens</span></p>
+            <p><strong>Gen:</strong> EGFR | <strong>Tổng số bài báo phân tích:</strong> 15 bài từ PubMed</p>
+        </div>
+
+        <div class="grid">
+            <div class="card">
+                <h2>🧬 Cấu Trúc 3D Protein (8A27)</h2>
+                <div style="height: 400px; position: relative; border-radius: 8px; overflow: hidden;">
+                    <div id="viewport_3d" style="width: 100%; height: 100%;" class="viewer_3Dmoljs"
+                         data-pdb="8A27" data-backgroundcolor="0x111827" data-style="cartoon:color=spectrum"></div>
+                </div>
+                <p style="font-size: 12px; color: #94a3b8; text-align: center; margin-top: 8px;">Dùng chuột kéo để xoay, lăn chuột để phóng to/thu nhỏ mô hình 3D</p>
+            </div>
+            <div class="card">
+                <h2>⚙️ Cách Thức Hoạt Động & Chức Năng</h2>
+                <p style="line-height: 1.6; font-size: 14px;">Receptor tyrosine kinase binding ligands of the EGF family and activating several signaling cascades to convert extracellular cues into appropriate cellular responses (PubMed:10805725, PubMed:12297050, PubMed:12620237, PubMed:12873986, PubMed:15374980, PubMed:15590694, PubMed:17115032, PubMed:19560417, PubMed:21258366, PubMed:27153536, PubMed:2790960, PubMed:35538033, PubMed:9488479). Known ligands include EGF, TGFA/TGF-alpha, AREG, epigen/EPGN, BTC/betacellulin, epiregulin/EREG and HBEGF/heparin-binding EGF (PubMed:12297049, PubMed:15611079, P...</p>
+                
+            </div>
+        </div>
+
+        <div class="grid" style="margin-top: 24px;">
+            <div class="card">
+                <h2>📊 Top Cơ Chế Hoạt Động Phân Tử</h2>
+                <img src="EGFR_mechanisms.png" alt="Mechanisms Chart">
+            </div>
+            <div class="card">
+                <h2>⚠️ Top Hiệu Ứng Phụ & Độc Tính</h2>
+                <img src="EGFR_side_effects.png" alt="Side Effects Chart">
+            </div>
+        </div>
+
+        <h2>📝 Dẫn Chứng Khoa Học Từ Abstracts</h2>
+        <div class="card">
+            <h3 style="color: #f87171;">Bằng chứng về Hiệu Ứng Phụ & Tác Dụng Bất Lợi:</h3>
+            <div class="evidence-card">
+                <strong>PMID:42431285 (2027):</strong> "AIM OF THE STUDY: To elucidate the active material basis and multi-target mechanisms of FS herb pair against acute alcohol-induced liver injury (AALI) by integrating serum pharmacochemistry, network pharmacology, lipidomics, and in vivo experimental validation."
+                <br><a href="https://pubmed.ncbi.nlm.nih.gov/42431285/" target="_blank">Xem trên PubMed &rarr;</a>
+            </div><div class="evidence-card">
+                <strong>PMID:41579067 (2026):</strong> "BACKGROUND: Malignant hypertension (mHTN) is a severe hypertensive emergency, often associated with renal deterioration."
+                <br><a href="https://pubmed.ncbi.nlm.nih.gov/41579067/" target="_blank">Xem trên PubMed &rarr;</a>
+            </div><div class="evidence-card">
+                <strong>PMID:42341853 (2026):</strong> "ETHNOPHARMACOLOGICAL RELEVANCE: Epidermal growth factor receptor tyrosine kinase inhibitors (EGFR-TKIs) are a cornerstone therapy for lung adenocarcinoma (LUAD), but their efficacy is often limited by primary or acquired resistance."
+                <br><a href="https://pubmed.ncbi.nlm.nih.gov/42341853/" target="_blank">Xem trên PubMed &rarr;</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
