@@ -3,11 +3,17 @@ Semantic Text Splitter chuyên dụng cho văn bản khoa học.
 Bảo toàn tính toàn vẹn câu và gắn nhãn metadata ngữ cảnh.
 """
 
+# lấy từ thư viện typing các class List, Dict, Any để khai báo kiểu dữ liệu
 from typing import List, Dict, Any
+
+# lấy từ thư viện pydantic để lấy class BaseModel.
 from pydantic import BaseModel
+
+# lấy thư viện re để xử lý regular expression, tách câu, tách đoạn.
+# email: linh@gmail.com --> regex: r"\b[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Z|a-z]{2,}\b"
 import re
 
-
+# Khai báo 1 chunk: id, content, metadata
 class DocumentChunk(BaseModel):
     chunk_id: str
     content: str

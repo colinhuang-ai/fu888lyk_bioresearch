@@ -19,4 +19,5 @@ class AcademicArticle(BaseModel):
     url: str = ""
     source: str = "PubMed"
     keywords: List[str] = Field(default_factory=list)
+    pmcid: Optional[str] = None
     open_access_pdf: Optional[str] = None

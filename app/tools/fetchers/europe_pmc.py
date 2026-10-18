@@ -7,6 +7,7 @@ from typing import List, Optional
 from pathlib import Path
 import requests
 from app.tools.fetchers.model.article import AcademicArticle
+from app.tools.fetchers.jats_markdown import jats_to_markdown
 from app.config import RAW_PAPERS_DIR
 
 
@@ -14,9 +15,30 @@ class EuropePMCFetcher:
     """Europe PMC REST API Client."""
 
     BASE_URL = "https://www.ebi.ac.uk/europepmc/webservices/rest/search"
+    FULLTEXT_URL = "https://www.ebi.ac.uk/europepmc/webservices/rest/{pmcid}/fullTextXML"
+    USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ScientificResearchAgent/1.0"
 
     def __init__(self, download_dir: Path = RAW_PAPERS_DIR):
         self.download_dir = download_dir
+
+    @staticmethod
+    def _looks_like_pdf(head: bytes) -> bool:
+        """File PDF thật chứa chữ ký '%PDF-' ở đầu (trong 1 KB đầu theo đặc tả)."""
+        return b"%PDF-" in head[:1024]
+
+    @classmethod
+    def _is_pdf_file(cls, path: Path) -> bool:
+        try:
+            with open(path, "rb") as f:
+                return cls._looks_like_pdf(f.read(1024))
+        except OSError:
+            return False
+
+    @staticmethod
+    def _default_stem(article: AcademicArticle) -> str:
+        """Tên file mặc định (không đuôi): pmid_<PMID>_<40 ký tự đầu của tiêu đề>."""
+        clean_title = "".join(c for c in article.title if c.isalnum() or c in (" ", "_", "-")).rstrip()
+        return f"pmid_{article.pmid}_{clean_title[:40].replace(' ', '_')}"
 
     def search_articles(
         self,
@@ -87,6 +109,7 @@ class EuropePMCFetcher:
                     url=f"https://europepmc.org/article/MED/{pmid}" if pmid else "",
                     source="EuropePMC",
                     keywords=keywords,
+                    pmcid=pmcid or None,
                     open_access_pdf=pdf_url
                 ))
 
@@ -96,14 +119,84 @@ class EuropePMCFetcher:
         return articles
 
     def download_pdf(self, article: AcademicArticle, filename: Optional[str] = None) -> Optional[Path]:
-        """Tải file PDF của bài báo về thư mục data/raw_papers."""
+        """
+        Tải file PDF của bài báo về thư mục data/raw_papers.
+        Chỉ giữ lại file khi nội dung thật sự là PDF. Nếu server trả về HTML (ví dụ trang
+        CAPTCHA chống bot của PMC) thì trả None và không để lại file nào.
+        """
         if not article.open_access_pdf:
             print(f"[EuropePMCFetcher] Bài báo '{article.title[:40]}' không có PDF Open Access công khai.")
             return None
 
         if not filename:
-            clean_title = "".join(c for c in article.title if c.isalnum() or c in (" ", "_", "-")).rstrip()
-            filename = f"pmid_{article.pmid}_{clean_title[:40].replace(' ', '_')}.pdf"
+            filename = f"{self._default_stem(article)}.pdf"
+
+        file_path = self.download_dir / filename
+        if file_path.exists():
+            if self._is_pdf_file(file_path):
+                print(f"[EuropePMCFetcher] File đã tồn tại: {file_path.name}")
+                return file_path
+            # Bản tải lỗi từ trước (thường là trang HTML đặt tên .pdf) -> xóa để tải lại
+            print(f"[EuropePMCFetcher] {file_path.name} không phải PDF thật, xóa và tải lại.")
+            file_path.unlink()
+
+        # Ghi vào file tạm, chỉ đổi tên thành .pdf sau khi xác nhận đúng định dạng
+        tmp_path = file_path.with_name(file_path.name + ".part")
+        try:
+            headers = {"User-Agent": self.USER_AGENT}
+            with requests.get(article.open_access_pdf, headers=headers, stream=True, timeout=25) as resp:
+                resp.raise_for_status()
+
+                chunks = resp.iter_content(chunk_size=8192)
+                head = b""
+                for chunk in chunks:
+                    head += chunk
+                    if len(head) >= 1024:
+                        break
+
+                if not self._looks_like_pdf(head):
+                    content_type = resp.headers.get("Content-Type", "không rõ")
+                    print(
+                        f"[EuropePMCFetcher] Server không trả về PDF (Content-Type: {content_type}), "
+                        f"có thể bị chặn bởi CAPTCHA/chống bot: {article.open_access_pdf}"
+                    )
+                    return None
+
+                with open(tmp_path, "wb") as f:
+                    f.write(head)
+                    for chunk in chunks:
+                        if chunk:
+                            f.write(chunk)
+
+            tmp_path.replace(file_path)
+            print(f"[EuropePMCFetcher] Đã tải thành công: {file_path.name}")
+            return file_path
+        except Exception as e:
+            print(f"[EuropePMCFetcher] Tải PDF thất bại từ {article.open_access_pdf}: {e}")
+            return None
+        finally:
+            if tmp_path.exists():
+                tmp_path.unlink()
+
+    def _resolve_pmcid(self, article: AcademicArticle) -> Optional[str]:
+        """Tra PMCID của bài báo (vd. từ PubMed) qua Europe PMC bằng PMID."""
+        if not article.pmid:
+            return None
+        hits = self.search_articles(f"EXT_ID:{article.pmid} AND SRC:MED", max_results=1)
+        return hits[0].pmcid if hits else None
+
+    def save_markdown(self, article: AcademicArticle, filename: Optional[str] = None) -> Optional[Path]:
+        """
+        Lấy full text (JATS XML) từ Europe PMC rồi lưu thành file Markdown trong data/raw_papers.
+        Chỉ hoạt động với bài thuộc Open Access subset của PMC; trả None nếu không có full text.
+        """
+        pmcid = article.pmcid or self._resolve_pmcid(article)
+        if not pmcid:
+            print(f"[EuropePMCFetcher] Bài báo '{article.title[:40]}' không có PMCID (không có full text trên PMC).")
+            return None
+
+        if not filename:
+            filename = f"{self._default_stem(article)}.md"
 
         file_path = self.download_dir / filename
         if file_path.exists():
@@ -111,19 +204,23 @@ class EuropePMCFetcher:
             return file_path
 
         try:
-            headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) ScientificResearchAgent/1.0"}
-            resp = requests.get(article.open_access_pdf, headers=headers, stream=True, timeout=25)
+            resp = requests.get(
+                self.FULLTEXT_URL.format(pmcid=pmcid),
+                headers={"User-Agent": self.USER_AGENT},
+                timeout=25,
+            )
+            if resp.status_code == 404:
+                print(f"[EuropePMCFetcher] {pmcid} không có full text XML (không thuộc Open Access subset).")
+                return None
             resp.raise_for_status()
 
-            with open(file_path, "wb") as f:
-                for chunk in resp.iter_content(chunk_size=8192):
-                    if chunk:
-                        f.write(chunk)
+            markdown = jats_to_markdown(resp.content, article.model_copy(update={"pmcid": pmcid}))
+            file_path.write_text(markdown, encoding="utf-8")
 
-            print(f"[EuropePMCFetcher] Đã tải thành công: {file_path.name}")
+            print(f"[EuropePMCFetcher] Đã lưu Markdown: {file_path.name}")
             return file_path
         except Exception as e:
-            print(f"[EuropePMCFetcher] Tải PDF thất bại từ {article.open_access_pdf}: {e}")
+            print(f"[EuropePMCFetcher] Lưu Markdown thất bại cho {pmcid}: {e}")
             if file_path.exists():
                 file_path.unlink()
             return None

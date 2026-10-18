@@ -10,7 +10,7 @@ Dựa trên giáo trình và kiến trúc chuẩn tại: [`research_syllabus_and
 
 1. **Thu Thập Bài Báo Tự Động (Literature Mining)**:
    - Tích hợp trực tiếp **NCBI PubMed API (E-Utilities)** để lấy các công trình mới nhất theo từ khóa vi khuẩn (*Streptomyces*, *Bacillus*, xạ khuẩn biển) và đích ung thư (*MCF-7, HeLa, A549, HepG2, Caspase-3, Apoptosis*).
-   - Tích hợp **Europe PMC API** hỗ trợ định danh và tải bài báo Open Access PDF trực tiếp về máy.
+   - Tích hợp **Europe PMC API** hỗ trợ định danh bài báo Open Access, lưu **full text dạng Markdown** (kèm bảng số liệu và tài liệu tham khảo) và tải PDF về máy. Lưu ý: PMC có thể chặn tải PDF tự động bằng CAPTCHA, khi đó tool bỏ qua chứ không lưu file lỗi.
 2. **Kho Tri Thức RAG Hybrid (ChromaDB + BM25)**:
    - Kết hợp Dense Semantic Vector (ChromaDB) và Sparse Keyword Indexing (BM25Okapi).
    - Thuật toán **Reciprocal Rank Fusion (RRF)** giúp truy xuất chính xác từng danh pháp vi sinh, mã hợp chất, gen và dòng tế bào.
@@ -36,16 +36,20 @@ anti-cancer-research/
 │   ├── vector_db/             # ChromaDB persistent vector storage
 │   └── lab_compounds.csv      # Bảng dữ liệu hoạt tính sinh học phòng lab
 ├── app/
-│   ├── fetchers/              # Module thu thập dữ liệu (PubMed & Europe PMC)
-│   ├── ingestion/             # Module đọc PDF (pypdfium2) & chia đoạn ngữ nghĩa
-│   ├── chemistry/             # Module hóa dược (PubChem & Lipinski Rule of 5)
-│   ├── rag/                   # Lõi Hybrid RAG (ChromaDB + BM25 + RRF)
-│   ├── writer/                # Bộ máy soạn thảo paper & xuất Microsoft Word (.docx)
-│   └── agent/                 # Lớp điều phối tổng thể (ScientificResearchAssistant)
+│   ├── config.py              # Cấu hình trung tâm (đường dẫn, API key, tên collection)
+│   ├── agent/                 # Lớp điều phối tổng thể (ScientificResearchAssistant)
+│   └── tools/                 # Các năng lực độc lập, không phụ thuộc giao diện
+│       ├── fetchers/          # Thu thập dữ liệu (PubMed & Europe PMC)
+│       ├── ingestion/         # Đọc PDF (pypdfium2) & chia đoạn ngữ nghĩa
+│       ├── chemistry/         # Hóa dược (PubChem & Lipinski Rule of 5)
+│       ├── rag/               # Lõi Hybrid RAG (ChromaDB + BM25 + RRF)
+│       └── writer/            # Soạn thảo paper & xuất Microsoft Word (.docx)
+├── views/                     # Giao diện Streamlit, mỗi tab một module
+├── books/                     # Notebook & script demo dạy học
 ├── outputs/                   # Nơi lưu các bản thảo bài báo (.docx & .md) được sinh ra
 ├── tests/                     # Bộ kiểm thử tự động
-├── app.py                     # Giao diện Web trực quan (Streamlit Dashboard)
-├── main.py                    # Giao diện dòng lệnh (Interactive CLI)
+├── appst.py                   # Giao diện Web trực quan (Streamlit Dashboard)
+├── cli.py                     # Giao diện dòng lệnh (Interactive CLI, dùng Rich)
 ├── requirements.txt           # Danh mục thư viện Python
 └── research_syllabus_and_rag_blueprint.md  # Giáo trình & thiết kế kiến trúc chuẩn
 ```
@@ -57,7 +61,7 @@ anti-cancer-research/
 ### 1. Khởi chạy Giao diện Web Trực quan (Khuyên dùng)
 Giao diện Web thân thiện, hỗ trợ đầy đủ các tab trực quan:
 ```bash
-streamlit run app.py
+streamlit run appst.py
 ```
 Trình duyệt sẽ tự động mở tại: `http://localhost:8501`. Tại đây bạn có thể:
 - Tìm kiếm và tải bài báo từ PubMed vào RAG chỉ với 1 click.
@@ -67,7 +71,7 @@ Trình duyệt sẽ tự động mở tại: `http://localhost:8501`. Tại đâ
 ### 2. Khởi chạy Giao diện Dòng lệnh (CLI Runner)
 Chạy menu dòng lệnh tương tác trực tiếp trong Terminal:
 ```bash
-python main.py
+python cli.py
 ```
 
 ### 3. Chạy Kiểm thử Toàn diện

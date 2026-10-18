@@ -33,12 +33,21 @@ def render(assistant):
             st.info("Chưa có tài liệu nào trong kho RAG hoặc không có kết quả khớp. Hãy nạp bài báo ở Tab 1 hoặc tải lên file PDF bên dưới.")
 
     st.markdown("---")
-    st.subheader("Nạp thêm file PDF bài báo nghiên cứu (.pdf)")
-    uploaded_pdf = st.file_uploader("Chọn file PDF bài báo khoa học để nạp vào RAG", type=["pdf"])
-    if uploaded_pdf is not None:
-        save_dest = RAW_PAPERS_DIR / uploaded_pdf.name
+    st.subheader("Nạp thêm bài báo nghiên cứu (.pdf / .md)")
+    uploaded = st.file_uploader("Chọn file PDF hoặc Markdown để nạp vào RAG", type=["pdf", "md"])
+    if uploaded is not None:
+        save_dest = RAW_PAPERS_DIR / uploaded.name
         with open(save_dest, "wb") as f:
-            f.write(uploaded_pdf.getbuffer())
-        with st.spinner("Đang phân tích cấu trúc PDF và lập chỉ mục..."):
-            res = assistant.ingest_pdf_file(save_dest)
-        st.success(f"✓ Đã nạp thành công file '{uploaded_pdf.name}' ({res['chunks_indexed']} chunks đã lập chỉ mục)!")
+            f.write(uploaded.getbuffer())
+        with st.spinner("Đang phân tích cấu trúc tài liệu và lập chỉ mục..."):
+            res = assistant.ingest_document(save_dest)
+        st.success(f"✓ Đã nạp thành công file '{uploaded.name}' ({res.chunks_indexed} chunks đã lập chỉ mục)!")
+
+    if st.button("📂 Nạp toàn bộ thư mục data/raw_papers"):
+        with st.spinner("Đang lập chỉ mục toàn bộ PDF / Markdown..."):
+            results = assistant.ingest_directory(RAW_PAPERS_DIR)
+        ok = [r for r in results if not r.error]
+        st.success(f"✓ Đã nạp {len(ok)}/{len(results)} file ({sum(r.chunks_indexed for r in ok)} chunks).")
+        for r in results:
+            if r.error:
+                st.warning(f"{r.file_name}: {r.error}")

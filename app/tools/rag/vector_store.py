@@ -47,6 +47,10 @@ class VectorStore:
             metadatas=metadatas
         )
 
+    def delete_document(self, doc_id: str):
+        """Xóa mọi chunk thuộc một tài liệu (theo metadata doc_id), dùng khi nạp lại file."""
+        self.collection.delete(where={"doc_id": doc_id})
+
     def search(self, query: str, top_k: int = 5) -> List[Dict[str, Any]]:
         """Truy vấn tìm kiếm ngữ nghĩa theo khoảng cách vector."""
         count = self.collection.count()

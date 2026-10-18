@@ -76,6 +76,7 @@ class PDFPaperParser:
         pdf = pdfium.PdfDocument(str(path))
         total_pages = len(pdf)
 
+        # tìm xem bao nhiêu trang
         page_texts: List[str] = []
         for i in range(total_pages):
             page = pdf[i]

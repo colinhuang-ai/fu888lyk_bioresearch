@@ -38,7 +38,7 @@ for r in results:
     print(r["rank"], r["rrf_score"], r["content"][:100])
 
 # 5. Soạn thảo bài báo và xuất Word (.docx)
-from app.writer.paper_generator import PaperMetadata
+from app.tools.writer.paper_generator import PaperMetadata
 
 meta = PaperMetadata(
     title="",

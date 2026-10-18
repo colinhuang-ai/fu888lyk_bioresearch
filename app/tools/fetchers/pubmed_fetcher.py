@@ -9,7 +9,7 @@ import requests
 from app.config import NCBI_EMAIL, NCBI_API_KEY
 from app.tools.fetchers.model.article import AcademicArticle
 
-
+# class: object chua du lieu va cac phuong thuc lien quan den PubMed API
 class PubMedFetcher:
     """NCBI Entrez E-Utilities API Client."""
 
@@ -17,10 +17,13 @@ class PubMedFetcher:
     BASE_ESUMMARY = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi"
     BASE_EFETCH = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi"
 
+    # constructor (OOP)
+    # email: str = NCBI_EMAIL, api_key: str = NCBI_API_KEY
     def __init__(self, email: str = NCBI_EMAIL, api_key: str = NCBI_API_KEY):
         self.email = email
         self.api_key = api_key
 
+    # private method to get parameters for API requests
     def _get_base_params(self) -> Dict[str, str]:
         params = {"retmode": "json"}
         if self.email:
@@ -29,6 +32,7 @@ class PubMedFetcher:
             params["api_key"] = self.api_key
         return params
 
+    # public method to search for PMIDs based on a query
     def search_pmids(self, query: str, max_results: int = 10) -> List[str]:
         """Tìm kiếm danh sách PMID theo từ khóa."""
         params = self._get_base_params()
@@ -39,7 +43,11 @@ class PubMedFetcher:
             "sort": "pub_date"
         })
 
+        print(f"[PubMedFetcher] Tìm kiếm PubMed với từ khóa: '{query}', tối đa {max_results} kết quả.")
+        print(f"[PubMedFetcher] URL: {self.BASE_ESEARCH}, Params: {params}")
+
         try:
+            # Gọi eSearch để lấy danh sách PMID
             resp = requests.get(self.BASE_ESEARCH, params=params, timeout=12)
             resp.raise_for_status()
             data = resp.json()
@@ -178,3 +186,57 @@ class PubMedFetcher:
         if not pmids:
             return []
         return self.fetch_details_by_pmids(pmids)
+
+
+def print_article(article: AcademicArticle) -> None:
+    """In tóm tắt một bài báo ra màn hình."""
+    print(f"  PMID    : {article.pmid}")
+    print(f"  Tiêu đề : {article.title}")
+    print(f"  Tác giả : {', '.join(article.authors[:3])}{' ...' if len(article.authors) > 3 else ''}")
+    print(f"  Tạp chí : {article.journal} ({article.pub_year})")
+    print(f"  DOI     : {article.doi or 'N/A'}")
+    print(f"  URL     : {article.url}")
+    print(f"  Abstract: {article.abstract[:200]}{'...' if len(article.abstract) > 200 else ''}")
+    print()
+
+
+def main():
+    """Chạy thử từng phương thức của PubMedFetcher (gọi mạng thật)."""
+    fetcher = PubMedFetcher()
+    query = "Bifidobacterium colorectal cancer"
+
+    print("=== 1. _get_base_params ===")
+    print(fetcher._get_base_params())
+
+    print("\n=== 2. search_pmids ===")
+    pmids = fetcher.search_pmids(query, max_results=3)
+    print(f"Tìm thấy {len(pmids)} PMID: {pmids}")
+    if not pmids:
+        print("Không có PMID nào, dừng test (kiểm tra kết nối mạng).")
+        return
+
+    print("\n=== 3. fetch_details_by_pmids ===")
+    articles = fetcher.fetch_details_by_pmids(pmids)
+    print(f"Lấy được {len(articles)} bài báo:\n")
+    for article in articles:
+        print_article(article)
+
+    print("=== 4. _fallback_esummary ===")
+    summaries = fetcher._fallback_esummary(pmids[:2])
+    for article in summaries:
+        print(f"  [{article.pmid}] {article.title} - {article.journal} ({article.pub_year})")
+
+    print("\n=== 5. search_articles (tìm + lấy chi tiết) ===")
+    articles = fetcher.search_articles("doxorubicin MCF-7", max_results=2)
+    print(f"Lấy được {len(articles)} bài báo:\n")
+    for article in articles:
+        print_article(article)
+
+    print("=== 6. Trường hợp biên ===")
+    print("fetch_details_by_pmids([]) ->", fetcher.fetch_details_by_pmids([]))
+    print("search_articles(từ khóa vô nghĩa) ->",
+          fetcher.search_articles("xyzqwv_khong_ton_tai_123", max_results=2))
+
+
+if __name__ == "__main__":
+    main()

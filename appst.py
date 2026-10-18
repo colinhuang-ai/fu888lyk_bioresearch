@@ -1,6 +1,6 @@
 """
 Web Application: Trợ lý AI Nghiên cứu Dược liệu Vi sinh & Soạn thảo Bài báo Quốc tế.
-Chạy bằng lệnh: streamlit run app.py
+Chạy bằng lệnh: streamlit run appst.py
 """
 
 # uikit dành cho python web app, giúp tạo giao diện đẹp và trực quan

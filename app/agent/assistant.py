@@ -15,6 +15,7 @@ from app.tools.chemistry.pubchem_client import PubChemClient, CompoundData
 from app.tools.chemistry.druglikeness import evaluate_druglikeness, DruglikenessReport
 from app.tools.rag.vector_store import VectorStore
 from app.tools.rag.hybrid_retriever import HybridRetriever
+from app.tools.rag.document_indexer import DocumentIndexer, IndexResult
 from app.tools.writer.paper_generator import ScientificPaperGenerator, PaperMetadata, GeneratedManuscript
 from app.config import RAW_PAPERS_DIR, OUTPUT_DIR
 
@@ -29,6 +30,7 @@ class ScientificResearchAssistant:
         self.splitter = ScientificTextSplitter()
         self.pubchem = PubChemClient()
         self.vector_store = VectorStore()
+        self.indexer = DocumentIndexer(self.vector_store, self.splitter, self.pdf_parser)
         self.retriever = HybridRetriever(vector_store=self.vector_store)
         self.paper_writer = ScientificPaperGenerator(hybrid_retriever=self.retriever)
 
@@ -60,38 +62,31 @@ class ScientificResearchAssistant:
 
         return articles
 
+    def ingest_document(self, file_path: str | Path) -> IndexResult:
+        """Nạp một file PDF hoặc Markdown vào ChromaDB và dựng lại chỉ mục BM25."""
+        result = self.indexer.index_file(file_path)
+        if result.chunks_indexed:
+            self.retriever.reload()
+        return result
+
+    def ingest_directory(self, directory: str | Path = RAW_PAPERS_DIR) -> List[IndexResult]:
+        """Nạp toàn bộ PDF / Markdown trong một thư mục (mặc định data/raw_papers)."""
+        results = self.indexer.index_directory(directory)
+        if any(r.chunks_indexed for r in results):
+            self.retriever.reload()
+        return results
+
     def ingest_pdf_file(self, pdf_path: str | Path) -> Dict[str, Any]:
         """Đọc và nạp một file PDF vào kho RAG."""
-        parsed = self.pdf_parser.parse_pdf(pdf_path)
-        all_chunks: List[DocumentChunk] = []
-
-        base_meta = {
-            "doc_id": Path(pdf_path).stem,
-            "title": parsed.title,
-            "source": Path(pdf_path).name,
-            "strains": parsed.identified_strains,
-            "cell_lines": parsed.identified_cell_lines,
-            "pathways": parsed.identified_pathways
-        }
-
-        for sec in parsed.sections:
-            sec_meta = dict(base_meta)
-            sec_meta["section"] = sec.title
-            chunks = self.splitter.split_text(sec.content, sec_meta)
-            all_chunks.extend(chunks)
-
-        if all_chunks:
-            self.vector_store.add_chunks(all_chunks)
-            self.retriever.reload()
-
+        r = self.ingest_document(pdf_path)
         return {
-            "file_name": parsed.file_name,
-            "title": parsed.title,
-            "pages": parsed.total_pages,
-            "chunks_indexed": len(all_chunks),
-            "strains": parsed.identified_strains,
-            "cell_lines": parsed.identified_cell_lines,
-            "ic50_snippets": parsed.extracted_ic50_snippets
+            "file_name": r.file_name,
+            "title": r.title,
+            "pages": r.pages,
+            "chunks_indexed": r.chunks_indexed,
+            "strains": r.strains,
+            "cell_lines": r.cell_lines,
+            "ic50_snippets": r.ic50_snippets
         }
 
     def analyze_chemical_compound(self, compound_name: str) -> Optional[DruglikenessReport]:

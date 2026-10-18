@@ -43,7 +43,8 @@ anti-cancer-research/
 │   └── tools/                  # Các "năng lực" độc lập, không biết gì về UI
 │       ├── fetchers/           # Thu thập bài báo
 │       │   ├── pubmed_fetcher.py   # PubMedFetcher (NCBI E-Utilities)
-│       │   ├── europe_pmc.py       # EuropePMCFetcher (+ tải PDF Open Access)
+│       │   ├── europe_pmc.py       # EuropePMCFetcher (+ tải PDF Open Access, lưu full text Markdown)
+│       │   ├── jats_markdown.py    # jats_to_markdown(): JATS XML -> Markdown (hàm thuần, không gọi mạng)
 │       │   └── model/article.py    # AcademicArticle (pydantic)
 │       ├── ingestion/          # Đọc & chia nhỏ tài liệu
 │       │   ├── pdf_parser.py       # PDFPaperParser (pypdfium2) + regex bắt strain/cell line/pathway
@@ -61,7 +62,7 @@ anti-cancer-research/
 │   └── sidebar.py, tab_collect.py, tab_chemistry.py, tab_rag.py, tab_writer.py, tab_lab.py
 │
 ├── data/
-│   ├── raw_papers/             # PDF tải về / upload
+│   ├── raw_papers/             # PDF tải về / upload và Markdown full text (pmid_<PMID>_<tiêu đề>.pdf|.md)
 │   ├── vector_db/              # ChromaDB persistent (KHÔNG sửa tay, KHÔNG commit)
 │   ├── test_vector_db/         # DB tạm của test, bị xóa trong tearDown
 │   └── lab_compounds.csv       # Dữ liệu hoạt tính sinh học phòng lab
@@ -97,7 +98,7 @@ Quy tắc bắt buộc:
 | Tool | Lớp / hàm chính | Vào → Ra | Ghi chú |
 |---|---|---|---|
 | PubMed | `PubMedFetcher.search_articles(query, max_results)` | str → `List[AcademicArticle]` | NCBI E-Utilities; có `_fallback_esummary` khi efetch lỗi. Khai báo `NCBI_EMAIL` để nâng rate limit 3→10 req/s |
-| Europe PMC | `EuropePMCFetcher.search_articles()`, `.download_pdf(article)` | str → `List[AcademicArticle]`; PDF → `data/raw_papers/` | Nguồn duy nhất lấy được PDF Open Access |
+| Europe PMC | `EuropePMCFetcher.search_articles()`, `.download_pdf(article)`, `.save_markdown(article)` | str → `List[AcademicArticle]`; PDF / Markdown → `data/raw_papers/` | `download_pdf` chỉ giữ file có chữ ký `%PDF-`; PMC chặn script bằng reCAPTCHA nên thường trả `None` (không vượt CAPTCHA). `save_markdown` lấy full text JATS XML qua REST API chính thức, chỉ với bài thuộc Open Access subset (cần `pmcid`, tự tra theo PMID nếu thiếu) |
 | PDF parser | `PDFPaperParser.parse_pdf(path)` | path → `ParsedPaper` | pypdfium2; nhận diện strain / cell line / pathway / đoạn IC50 bằng regex trong `STRAIN_PATTERNS`, `CELL_LINE_PATTERNS`, `PATHWAY_PATTERNS` |
 | Splitter | `ScientificTextSplitter.split_text(text, base_metadata)` | str + dict → `List[DocumentChunk]` | mặc định `chunk_size=800`, `chunk_overlap=150` |
 | Vector store | `VectorStore.add_chunks()`, `.search()`, `.count()`, `.get_all_documents()` | `List[DocumentChunk]` → ChromaDB | Persistent tại `data/vector_db`, collection `cancer_bacteria_research` |
@@ -144,8 +145,12 @@ Chi tiết từng bước kèm mẫu code: [.agents/skills/bio-research-tool/SKI
 - `data/vector_db/`, `data/test_vector_db/` — dữ liệu nhị phân ChromaDB sinh tự động.
 - `outputs/` — sản phẩm xuất ra, có thể tạo lại.
 - `__pycache__/`.
-- `../test-report/test/fu888lyk_bioresearch/` — bản sao cũ của dự án (vẫn dùng `src/`, cấu trúc phẳng,
-  chưa có thư mục `tools/`). Chỉ để tham khảo, không đồng bộ thay đổi sang đó.
+- `.sample/test-report/` — bộ demo độc lập về protein/EGFR (`protein_client.py`, `pubmed_client.py`,
+  `analyzer.py`...), cấu trúc phẳng, không dùng `app/`. Không phải bản sao của dự án này. Chỉ để tham khảo,
+  không sửa và không import từ đó.
+- `research_syllabus_and_rag_blueprint.md` — tài liệu thiết kế gốc. Các đoạn code mẫu trong đó (`main.py`,
+  `app/rag/engine.py`, `ScientificRAGEngine`) là bản phác thảo ban đầu, không khớp cấu trúc hiện tại.
+  Cấu trúc thật nằm ở mục "Cấu trúc thư mục" phía trên.
 
 ## Cạm bẫy đã gặp trong repo này
 
