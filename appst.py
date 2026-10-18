@@ -3,11 +3,14 @@ Web Application: Trợ lý AI Nghiên cứu Dược liệu Vi sinh & Soạn th�
 Chạy bằng lệnh: streamlit run appst.py
 """
 
-# uikit dành cho python web app, giúp tạo giao diện đẹp và trực quan
+import importlib
 import streamlit as st
 
 from app.agent.assistant import ScientificResearchAssistant
 from views import sidebar, tab_chemistry, tab_collect, tab_lab, tab_rag, tab_writer
+
+# Tự động nạp lại module tab_lab để cập nhật dashboard mới nhất
+importlib.reload(tab_lab)
 
 # Cấu hình Streamlit
 st.set_page_config(

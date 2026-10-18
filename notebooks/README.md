@@ -58,8 +58,14 @@ print("File Word đã xuất:", manuscript.docx_file_path)
 
 ---
 
-## 💡 Gợi Ý Các Notebook Nghiên Cứu Nên Dựng:
-1. `01_pubmed_literature_mining.ipynb`: Tự động quét và thống kê số lượng bài báo theo từng năm cho chủng mục tiêu.
-2. `02_pubchem_admet_profiling.ipynb`: Phân tích thư viện hóa chất, vẽ biểu đồ phân bố khối lượng phân tử, LogP và tương đồng thuốc.
-3. `03_dose_response_ic50_curve.ipynb`: Vẽ đường cong liều - đáp ứng (Dose-response curve) tính $\text{IC}_{50}$ từ số liệu đo OD quang phổ kế.
-4. `04_manuscript_drafting_pipeline.ipynb`: Tự động hóa tạo bản thảo bài báo theo mẻ.
+## 📚 Danh Sách Các Notebook Trong Thư Mục
+
+1. [01_anticancer_discovery_pipeline.ipynb](01_anticancer_discovery_pipeline.ipynb) — **Từ Vi Khuẩn Biển Đến Bản Thảo ISI**: Quy trình toàn diện 8 chương từ thu thập tài liệu PubMed, nạp kho RAG Hybrid, kiểm tra hóa dược Lipinski, phân tích thực nghiệm và xuất file Word `.docx`.
+2. [02_visualize_lab_compounds.ipynb](02_visualize_lab_compounds.ipynb) — **Phân Tích & Trực Quan Hóa Dữ Liệu Lab Compounds**: Khai phá chuyên sâu 10 chương toàn bộ số liệu sàng lọc độc tế bào `data/lab_compounds.csv` với 7 biểu đồ khoa học chuẩn mực quốc tế (Heatmap, Activity-Selectivity Landscape, Boxplot, Cell Cycle Donut, Dose-Response Curves, Radar Optimization Chart).
+
+---
+
+## 💡 Gợi Ý Các Notebook Nghiên Cứu Mở Rộng:
+1. `03_dose_response_ic50_curve.ipynb`: Vẽ đường cong liều - đáp ứng (Dose-response curve) tính $\text{IC}_{50}$ từ số liệu đo OD quang phổ kế.
+2. `04_manuscript_drafting_pipeline.ipynb`: Tự động hóa tạo bản thảo bài báo theo mẻ.
+

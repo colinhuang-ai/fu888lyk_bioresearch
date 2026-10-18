@@ -1,6 +1,41 @@
-compound_id,compound_name,source_strain,cancer_cell_line,ic50_uM,assay_method,selectivity_index,apoptosis_status
-CPD-01,Streptoketide A,Streptomyces sp. VN-08,MCF-7,3.45,MTT (48h),14.2,Annexin V+ / Caspase-3 Cleaved
-CPD-01,Streptoketide A,Streptomyces sp. VN-08,HeLa,4.12,MTT (48h),11.8,MMP Loss (JC-1)
-CPD-02,Bacillopeptin B,Bacillus velezensis BV-12,A549,6.80,CCK-8 (48h),8.5,G2/M Arrest
-CPD-03,Marinomycin D,Actinomadura sp. M-04,HepG2,1.25,MTT (72h),22.0,Caspase-3/9 Activation / PARP Cleavage
-CPD-Ref,Doxorubicin,Positive Control,MCF-7,0.85,MTT (48h),5.1,DNA Intercalation / Apoptosis
+compound_id,compound_name,source_strain,cancer_cell_line,ic50_uM,assay_method,selectivity_index,apoptosis_status,isolation_source,compound_class,molecular_weight,purity_pct,cell_cycle_arrest,lead_status,tested_date
+CPD-01,Streptoketide A,Streptomyces sp. VN-08,MCF-7,3.45,MTT (48h),14.2,Annexin V+ / Caspase-3 Cleaved,Đất ngập mặn Cần Giờ,Polyketide,486.5,97.8,G2/M Phase,Lead Candidate,2026-02-14
+CPD-01,Streptoketide A,Streptomyces sp. VN-08,HeLa,4.12,MTT (48h),11.8,MMP Loss (JC-1),Đất ngập mặn Cần Giờ,Polyketide,486.5,97.8,G2/M Phase,Lead Candidate,2026-02-14
+CPD-01,Streptoketide A,Streptomyces sp. VN-08,HepG2,8.60,MTT (48h),5.7,Caspase-3 Activation,Đất ngập mặn Cần Giờ,Polyketide,486.5,97.8,G2/M Phase,Moderate,2026-02-18
+CPD-02,Bacillopeptin B,Bacillus velezensis BV-12,A549,6.80,CCK-8 (48h),8.5,G2/M Arrest,Rễ sâm Ngọc Linh,Non-ribosomal Peptide,642.8,95.2,G2/M Phase,Moderate,2026-03-02
+CPD-02,Bacillopeptin B,Bacillus velezensis BV-12,HCT-116,5.20,CCK-8 (48h),11.1,Annexin V+ / PI-,Rễ sâm Ngọc Linh,Non-ribosomal Peptide,642.8,95.2,G0/G1 Phase,Lead Candidate,2026-03-02
+CPD-03,Marinomycin D,Actinomadura sp. M-04,HepG2,1.25,MTT (72h),22.0,Caspase-3/9 Activation / PARP Cleavage,Trầm tích biển Nha Trang,Macrolide,890.1,99.1,S Phase,Potent Hit,2026-03-20
+CPD-03,Marinomycin D,Actinomadura sp. M-04,MCF-7,1.80,MTT (72h),15.3,MMP Loss (JC-1),Trầm tích biển Nha Trang,Macrolide,890.1,99.1,S Phase,Potent Hit,2026-03-20
+CPD-03,Marinomycin D,Actinomadura sp. M-04,A549,2.10,MTT (72h),13.1,Cytochrome C Release,Trầm tích biển Nha Trang,Macrolide,890.1,99.1,S Phase,Potent Hit,2026-03-22
+CPD-04,Nocardiopsin C,Nocardiopsis sp. NT-02,PC-3,2.85,SRB (48h),18.4,ROS Generation / Caspase-8,San hô mềm Côn Đảo,Alkaloid,378.4,96.4,G0/G1 Phase,Potent Hit,2026-04-05
+CPD-04,Nocardiopsin C,Nocardiopsis sp. NT-02,HeLa,3.10,SRB (48h),16.9,Annexin V+ / Caspase-3 Cleaved,San hô mềm Côn Đảo,Alkaloid,378.4,96.4,G0/G1 Phase,Lead Candidate,2026-04-05
+CPD-05,Salinosporoid F,Salinispora arenicola SA-01,HCT-116,0.95,CCK-8 (72h),31.5,20S Proteasome Inhibition,Trầm tích biển Bạch Long Vĩ,Polyketide-Peptide,313.8,98.6,G2/M Phase,Potent Hit,2026-04-18
+CPD-05,Salinosporoid F,Salinispora arenicola SA-01,MCF-7,1.40,CCK-8 (72h),21.4,Caspase-3 Cleavage,Trầm tích biển Bạch Long Vĩ,Polyketide-Peptide,313.8,98.6,G2/M Phase,Potent Hit,2026-04-18
+CPD-06,Micromonolide A,Micromonospora sp. CR-19,A549,4.60,MTT (48h),12.3,MMP Loss / ATP Depletion,Đất rừng ngập mặn Cà Mau,Macrolide,560.7,94.8,G0/G1 Phase,Lead Candidate,2026-05-02
+CPD-06,Micromonolide A,Micromonospora sp. CR-19,HepG2,7.90,MTT (48h),7.2,G0/G1 Arrest,Đất rừng ngập mặn Cà Mau,Macrolide,560.7,94.8,G0/G1 Phase,Moderate,2026-05-02
+CPD-07,Paenibacillin G,Paenibacillus polymyxa PB-05,K562,8.40,MTT (48h),6.5,Membrane Permeabilization,Bùn suối khoáng Bình Châu,Lipopeptide,785.0,93.5,None,Moderate,2026-05-15
+CPD-07,Paenibacillin G,Paenibacillus polymyxa PB-05,MCF-7,12.50,MTT (48h),4.4,LDH Release,Bùn suối khoáng Bình Châu,Lipopeptide,785.0,93.5,None,Moderate,2026-05-15
+CPD-08,Vietmycin A,Streptomyces sp. VN-22,HeLa,1.65,MTT (72h),24.8,Caspase-3/8/9 & PARP Cleavage,Đất vườn QG Cúc Phương,Anthracycline,543.5,98.9,S Phase,Potent Hit,2026-06-01
+CPD-08,Vietmycin A,Streptomyces sp. VN-22,MCF-7,1.95,MTT (72h),21.0,DNA Topo-II Inhibition,Đất vườn QG Cúc Phương,Anthracycline,543.5,98.9,S Phase,Potent Hit,2026-06-01
+CPD-08,Vietmycin A,Streptomyces sp. VN-22,HepG2,2.40,MTT (72h),17.1,Annexin V+ / PI+,Đất vườn QG Cúc Phương,Anthracycline,543.5,98.9,S Phase,Potent Hit,2026-06-03
+CPD-09,Terpenoxazole B,Streptomyces albus SA-14,PC-3,14.80,CCK-8 (48h),3.8,Weak ROS Increase,Trầm tích hang Phong Nha,Terpenoid,412.6,91.2,None,Moderate,2026-06-20
+CPD-09,Terpenoxazole B,Streptomyces albus SA-14,A549,22.30,CCK-8 (48h),2.5,No Significant Apoptosis,Trầm tích hang Phong Nha,Terpenoid,412.6,91.2,None,Weak/Inactive,2026-06-20
+CPD-10,Pyocyanoid H,Pseudomonas fluorescens PF-09,HCT-116,4.80,SRB (48h),9.8,Autophagy Induction (LC3-II),Đất than bùn U Minh Hạ,Phenazine,268.3,96.0,G0/G1 Phase,Lead Candidate,2026-07-08
+CPD-11,Actinoplanin E,Actinoplanes sp. AP-07,MCF-7,3.90,MTT (48h),15.6,Bcl-2 Downreg / Bax Up,Trầm tích sông Tiền Giang,Non-ribosomal Peptide,674.8,97.1,G2/M Phase,Lead Candidate,2026-07-22
+CPD-11,Actinoplanin E,Actinoplanes sp. AP-07,HeLa,4.50,MTT (48h),13.5,Caspase-3 Cleaved,Trầm tích sông Tiền Giang,Non-ribosomal Peptide,674.8,97.1,G2/M Phase,Lead Candidate,2026-07-22
+CPD-12,Haloverticin T,Streptomyces drozdowiczii BT-03,A549,58.00,MTT (48h),1.2,Inactive (>50 uM),Nước biển bãi rạn Ninh Thuận,Polyketide,512.4,88.5,None,Weak/Inactive,2026-08-01
+CPD-Ref1,Doxorubicin,Positive Control,MCF-7,0.85,MTT (48h),5.1,DNA Intercalation / Apoptosis,Tiêu chuẩn lâm sàng,Anthracycline,543.5,99.8,G2/M Phase,Positive Control,2026-01-10
+CPD-Ref1,Doxorubicin,Positive Control,HeLa,0.72,MTT (48h),6.0,DNA Intercalation / Apoptosis,Tiêu chuẩn lâm sàng,Anthracycline,543.5,99.8,G2/M Phase,Positive Control,2026-01-10
+CPD-Ref1,Doxorubicin,Positive Control,HepG2,0.95,MTT (48h),4.5,DNA Intercalation / Apoptosis,Tiêu chuẩn lâm sàng,Anthracycline,543.5,99.8,G2/M Phase,Positive Control,2026-01-10
+CPD-Ref2,Cisplatin,Positive Control,A549,3.20,MTT (48h),3.8,DNA Crosslinking / Apoptosis,Tiêu chuẩn lâm sàng,Platinum Complex,300.0,99.9,G2/M Phase,Positive Control,2026-01-10
+CPD-Ref3,Paclitaxel,Positive Control,MCF-7,0.08,MTT (48h),8.2,Microtubule Stabilization,Tiêu chuẩn lâm sàng,Taxane,853.9,99.5,M Phase,Positive Control,2026-01-10
+CPD-Ref4,Staurosporine,Positive Control,MCF-7,0.25,MTT (48h),9.2,Caspase-3/9 Cleavage / Apoptosis,Tiêu chuẩn lâm sàng,Alkaloid,466.5,99.8,G2/M Phase,Positive Control,2026-01-10
+CPD-Ref4,Staurosporine,Positive Control,HeLa,0.18,MTT (48h),8.5,MMP Loss / Caspase-3,Tiêu chuẩn lâm sàng,Alkaloid,466.5,99.8,G2/M Phase,Positive Control,2026-01-10
+CPD-Ref4,Staurosporine,Positive Control,HepG2,0.32,MTT (48h),7.8,PARP Cleavage / Apoptosis,Tiêu chuẩn lâm sàng,Alkaloid,466.5,99.8,G2/M Phase,Positive Control,2026-01-10
+CPD-13,Oceanavimycin K,Streptomyces sp. NT-15,MCF-7,2.15,MTT (48h),16.4,Caspase-3 Cleavage / Bax Upregulation,Rạn san hô Hòn Tre Nha Trang,Polyketide,524.6,97.5,G2/M Phase,Potent Hit,2026-08-15
+CPD-13,Oceanavimycin K,Streptomyces sp. NT-15,HeLa,2.80,MTT (48h),13.2,MMP Loss (JC-1),Rạn san hô Hòn Tre Nha Trang,Polyketide,524.6,97.5,G2/M Phase,Lead Candidate,2026-08-15
+CPD-14,Haiphongmycin B,Streptomyces sp. HP-04,A549,3.60,CCK-8 (48h),12.8,ROS Induction / Caspase-9,Rừng ngập mặn Cát Bà,Macrolide,612.8,96.3,G0/G1 Phase,Lead Candidate,2026-08-25
+CPD-14,Haiphongmycin B,Streptomyces sp. HP-04,HCT-116,2.95,CCK-8 (48h),15.1,Annexin V+ / Caspase-3,Rừng ngập mặn Cát Bà,Macrolide,612.8,96.3,G0/G1 Phase,Potent Hit,2026-08-25
+CPD-15,Camaupeptin A,Micromonospora sp. CM-21,HepG2,1.75,MTT (72h),19.6,Autophagy & Apoptosis (LC3-II/Caspase-3),Trầm tích Mũi Cà Mau,Cyclic Peptide,728.9,98.2,G2/M Phase,Potent Hit,2026-09-05
+CPD-15,Camaupeptin A,Micromonospora sp. CM-21,PC-3,2.40,MTT (72h),14.7,Cytochrome C Release,Trầm tích Mũi Cà Mau,Cyclic Peptide,728.9,98.2,G2/M Phase,Lead Candidate,2026-09-05
+
